@@ -26,9 +26,6 @@ min_max_letter <- function(x) {
   print(c(min = min(x), max = max(x)))
 }
 
-
-
-
 mystat <- function(x) {
   mymean <- mean(x, na.rm = T)
   mysd <- sd(x, na.rm = T)
@@ -37,6 +34,25 @@ mystat <- function(x) {
   mymin <- min(x, na.rm = T)
   c(mean = mymean, sd = mysd, median = mymedian, max = mymax, min = mymin)
 }
+
+mystat2 <- function(df) {
+  output <- data.frame(matrix(0, nrow = length(df), ncol = 5))
+  mymean <- numeric(length(df))
+  mysd <- numeric(length(df))
+  mymedian <- numeric(length(df))
+  mymax <- numeric(length(df))
+  mymin <- numeric(length(df))
+  for (i in seq_along(df)){
+    mymean[i] <- round(mean(df[[i]], na.rm = T), 1)
+    mysd[i] <- round(sd(df[[i]], na.rm = T), 1)
+    mymedian[i] <- round(median(df[[i]], na.rm = T), 1)
+    mymax[i] <- round(max(df[[i]], na.rm = T), 1)
+    mymin[i] <- round(min(df[[i]], na.rm = T), 1)
+    output <- c(mean = mymean, sd = mysd, median = mymedian, max = mymax, min = mymin)
+  }
+  output
+}
+
 
 add
 

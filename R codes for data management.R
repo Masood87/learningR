@@ -9,10 +9,12 @@ dir()
 attach(data) #Since I'm not loading other data frames, I can attach this data frame to type less :)
 dim(dataframe) #dimensions of dataframe
 str(dataframe)
+glimpse(df)
 summary(dataframe)
-typeof(object) 
-length(object) 
-is.na() #returns a logical vector
+typeof(object)
+length(object)
+is.na() #returns a logical vector whether missing value
+sum(is.na(df$var)) #counts number of missing values
 ncol(data)
 nrow(data)
 vector <- vector("double", 44) #creates empty vector double with 44 elements. other options: "integer", "logical", "character"
@@ -29,6 +31,7 @@ cleaned_data <- na.omit(data_unclean) #removes all obs with missing values (NA)
 paste0("var", 1:5) #creates var1, var2, var3, var4, var5
 vectorname <- gsub("a", "b", vectorname) #replaces "a" to "b" in a vector
 cat("text", mean(var)) #concatenate and print
+seq_along(data) #returns a vector of sequential numbers equal to elements of df or vector
 
 # importing data
 read.csv("path/data", stringsAsFactors = F) # stringsAsFactors = T converts string data to factors
@@ -136,6 +139,21 @@ n <- nrow(data)
 shuffled <- data[sample(n),]
 sample50 <- data[sample(n*0.5),]
 
+
+### Spliting and merging datasets
+listname <- split(df, df$catvar) #splits df dataframe into smaller dataframes for each category of catvar, creates list
+df2 <- listname[[2]]
+#library(purrr)
+map(listname, function(df) lm(depvar ~ indvar, data = df)) #fits regression for each smaller dataframe inside listname
+map(listname, ~ lm(depvar ~ indvar, data = .)) #with purrr package
+map2(listname1, listname2, funtionname) #applies function on two lists, for instance 
+map2(list(1,2,3), list(2,3,4), rnorm) #equals: rnorm(1,2), rnorm(2,3), rnorm(3,4)
+pmap(list(n=list(1,3,4), mean=list(2,4,2), sd=list(2,2,3)), rnorm) #equals: rnorm(1,mean=2,sd=2), rnorm(3,mean=4,sd,2), ...
+invoke_map(list(rnorm, runif, rexp), n=5) #applies over functions, the opposite of map()
+# invoke_map_chr() invoke_map_dbl() invoke_map_lgl() etc
+
+
+
 ### The apply family 
 #lapply and sapply (simplified apply)
 listname <- list(numname = 4444, vectorname = c("this", "that", "nonsense"), loginame = FALSE)
@@ -156,4 +174,46 @@ sapply(vectorname, nchar, USE.NAMES = FALSE) #USE.NAMES is optional
 
 #vapply
 vapply(vector, nachar, numeric(1)) #also use: logical() or character()
+
+### passing functions as arguments with purrr package
+#library(purrr)
+
+map_dbl(vector, mean) #takes function (mean) applies to each element of vector and returns result, similar to sapply()
+map(vector, mean) #returns mean of each element of vector in a list, similar to lapply
+#map() returns a list or data frame
+#map_lgl() returns a logical vector
+#map_int() returns a integer vector
+#map_dbl() returns a double vector
+#map_chr() returns a character vector
+map(df, function(x) sum(is.na(x)))
+map(df, ~ sum(is.na(.)))
+# adverbs in purrr
+#safely() the output never throws an error, instread returns two elements: result and error
+#possibly()
+#quietly()
+
+# side effects: plots, printing output, saving files to disk
+#to deal with side effects, instead of map() we use walk()
+x %>% walk(print) #is the same as: walk(vector, print)
+# saving multiple plots on desk at once
+plots <- cyl %>% map(~ ggplot(., aes(mpg, wt)) + geom_point())
+paths <- paste0(names(plots), ".pdf")
+walk2(paths, plots, ggsave)
+
+
+
+
+
+### dont know what this is for now
+readLines("http://maestudents.tumblr.com")
+safe_readLines <- safely(readLines)
+safe_readLines("http://maestudents.tumblr.com")
+safe_readLines("http://asd;agjasdg.a")
+urls <- list(example = "http://example.org", rproj = "http://www.r-project.org", asdf = "http://asdfasdasdkfjlda")
+html <- map(urls, safe_readLines)
+str(html)
+results <- transpose(html)[["result"]]
+errors <- transpose(html)[["error"]]
+
+
 

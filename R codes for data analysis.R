@@ -1,4 +1,5 @@
-#### Data analysis
+######### Data analysis #########
+ ########## # # # # # #########
 
 ## one-way tabulation
 table(dataframe$var)
@@ -27,6 +28,11 @@ summary(filter(dataframe, var==1)) # Stata: sum * if var==1
 summary(subset(dataframe$var1, var2 == 1)) # Stata: sum var1 if var2==1
 
 mean(data$var)
+median(df$var)
+sd(df$var)
+max(df$var)
+min(df$var)
+quantile(df$var, probs = .05) #5th percentile
 
 rowMeans(dataframe, na.rm = T)
 rowSums(dataframe, na.rm = T)
@@ -85,7 +91,7 @@ bayes.t.test(data$var1 ~ data$var2, paired = T)
 # ANOVA: if we compare more than two groups
 #car: companion to applied regression
 #library(car)
-leveneTest(var, factorvar) #anova
+leveneTest(var, factorvar) #anova test that variance of categories of factorvar is different
 #parametric
 summary(aov(var, factorvar))
 #nonparametric
