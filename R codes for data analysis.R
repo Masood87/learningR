@@ -98,3 +98,4 @@ summary(aov(var, factorvar))
 kruskal.test(var, factor)
 
 
+

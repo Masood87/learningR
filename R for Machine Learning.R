@@ -20,6 +20,7 @@ plot(data, col = km_data$cluster) #for two var dataset??
 points(km_data$centers, pch = 22, bg = c(1,2), cex = 2) #pch=22 adds filled square points, bg is colors of the points, cex is the size
 km_data$centers #clusters' centroids, which are kind of like the centers of each cluster.
 km_seeds$tot.withinss/km_seeds$betweenss #available after kmean(): tot.withinss = within sum of squares, betweenss = between cluster sum of squares
+table(km_data$cluster, data$var) #compare clusters and actual data
 
 # Recursive partitioning (a.k.a. decision tree)
 library("rpart")

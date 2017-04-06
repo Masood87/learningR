@@ -7,12 +7,16 @@ setwd("path")
 getwd()
 dir()
 attach(data) #Since I'm not loading other data frames, I can attach this data frame to type less :)
+
+# quick look at the data
 dim(dataframe) #dimensions of dataframe
 str(dataframe)
 glimpse(df)
-summary(dataframe)
 typeof(object)
 length(object)
+summary(dataframe)
+
+#
 is.na() #returns a logical vector whether missing value
 sum(is.na(df$var)) #counts number of missing values
 ncol(data)
@@ -28,10 +32,12 @@ names(data)
 head(data, n=11) #print top 11 obs
 tail(data, n=11)
 cleaned_data <- na.omit(data_unclean) #removes all obs with missing values (NA)
+data$var <- droplevels(data$var) #in factor variable, drops/ removes all levels with 0 obs/count
 paste0("var", 1:5) #creates var1, var2, var3, var4, var5
 vectorname <- gsub("a", "b", vectorname) #replaces "a" to "b" in a vector
 cat("text", mean(var)) #concatenate and print
 seq_along(data) #returns a vector of sequential numbers equal to elements of df or vector
+arrange(var1, var2) #Stata: sort var1 var2
 
 # importing data
 read.csv("path/data", stringsAsFactors = F) # stringsAsFactors = T converts string data to factors
@@ -86,14 +92,16 @@ renameSheet(workbook, "oldname", "newname") #renames name of sheets for XLConnec
 removeSheet(workbook, sheet = "sheetname") #deletes sheet from XLConnect workbook
 
 # creating factor from numeric variable
-dataframe$factor-var <- factor(dataframe$numeric-var, 
-                               labels=c("label-one", "label-two", ..., "label-last"))
+data$fac_var <- factor(data$num_var, labels=c("label_one", "label_two", ..., "label_last"))
 
 # creating numeric from factor variable
 dataframe$numeric-var <- as.integer(dataframe$factor-var)
 
-# rename variable
-colnames(dataframe)[2:3] <- c("second-var", "third-var")
+# rename variables and rows
+colnames(data)[2:3] <- c("var2", "var3")
+rownames(data) <- c("one", "two", "three",...)
+dimnames(data) <- list(c("one", "two", "three", ...), c("var1", "var2", ...)) #combines colname and rowname. note, first is rowname
+data <- matrix(data, byrow = T, nrow = 3, dimnames = list(c("one", "two", "three"), c("var1", "var2")))
 
 # saving data in .RData format
 save(dataframe, file = "directory/filename.RDtata")
@@ -120,12 +128,14 @@ sum(dataframe$var == 1, na.rm = TRUE) # counts number of true cases that meet th
 dataframe <- c("gender", "q1", "q2", "q3", "q4", "q5")
 obs <- which(dataframe$gender == "f")
 summary(dataframe[obs,1])
-subset <- dataframe[obs,dataframe]
 
+# subset of a dataset
+subset <- dataframe[obs,dataframe]
+subset <- subset(data, subset = var2 > 1)
 subset <- select(dataframe, gender, q1:q5) # dplyr package
 subset <- filter(subset, gender == "f") # dplyr package
 
-dataframe2 <- mutate(dataframe, var1 = var1+var2, var2 = var1/var2) # dplyr package
+data2 <- mutate(data, var1 = var1+var2, var2 = var1/var2) # dplyr package
 
 # creating a subset of data
 subsetdata <- subset(data, select = c("var1", "var2", "var3"))
@@ -139,6 +149,15 @@ n <- nrow(data)
 shuffled <- data[sample(n),]
 sample50 <- data[sample(n*0.5),]
 
+# total, row total, column total
+sum(data)
+rowSums(data)
+colSums(data)
+
+### ordering data
+order(var1) #shows the order index
+var1[order(var1)] #shows the order values
+data[order(var1), ] #sort the data frame in order of smallest to largest var1
 
 ### Spliting and merging datasets
 listname <- split(df, df$catvar) #splits df dataframe into smaller dataframes for each category of catvar, creates list

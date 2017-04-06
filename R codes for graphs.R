@@ -30,7 +30,7 @@ qqline(dataframe$var)
 library(ggplot2)
 
 # barplots
-ggplot(dataframe, aes(var)) + geom_bar() # barchart of var
+ggplot(dataframe, aes(xyz = var)) + geom_bar() # barchart of frequencies of var, with x-axis label = xyz
 ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar() # barchart of xvar stacked with categories of yvar = geom_bar(position = "stack")
 ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar(position = "stack") # stacked with categories of yvar
 ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar(position = "dodge") # side-by-side with categories of yvar
