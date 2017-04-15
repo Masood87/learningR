@@ -54,14 +54,44 @@ mystat2 <- function(df) {
 }
 
 
-add
+### tabulation of all elements of a dataframe
+tab <- function(x) {
+  if (is.data.frame(x) == TRUE) {
+    for (i in 1:length(x)) {
+      print(paste("dataframe element", i))
+      print(table(x[[i]]))
+    }
+  } else if (is.list(x) == TRUE) {
+    for (i in 1:length(x)) {
+      print(paste("list element", i))
+      print(table(x[[i]]))
+    }
+  } else if (is.vector(x) == TRUE) {
+    print(table(x))
+  }
+}
 
 
+### robust functions: stopifnot()
+x <- c(NA, NA, NA)
+y <- c( 1, NA, NA, NA)
+z <- c(2, NA, 2, NA)
+
+both_na <- function(x,y) {
+  if (length(x) != length(y)) { # stopifnot(length(x) == length(y))
+    stop("vectors do not have equal length", call. = FALSE)
+  }
+  sum(is.na(x) & is.na(y))
+}
+both_na(x,y)
+both_na(y,z)
 
 
-
-
-
+show_miss <- function(x) {
+  n <- sum(is.na(x))
+  cat("Missing values: ", n, "\n", sep = "")
+  x
+}
 
 
 

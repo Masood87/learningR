@@ -15,12 +15,25 @@
     #Dunn index: minimum intercluster distance/maximum diameter
 
 
+### clustering using k-mean
+
 km_data <- kmean(data,2) #2 is number of clusters
 plot(data, col = km_data$cluster) #for two var dataset??
 points(km_data$centers, pch = 22, bg = c(1,2), cex = 2) #pch=22 adds filled square points, bg is colors of the points, cex is the size
+table(km_data$cluster, data$var) #compare clusters and actual data
+
+#this code is for using optimal number of clusters k
+ratio_ss <- rep(0, 10)
+for (k in 1:10) {
+  km_data <- kmeans(data, k, nstart = 20)
+  ratio_ss[k] <- km_data$tot.withinss/km_data$totss
+}
+plot(ratio, type = "b") #choose k such that clusters are compact and well separated, and when increasing it, the impact on ratio_ss is not significant (<.2)
+
 km_data$centers #clusters' centroids, which are kind of like the centers of each cluster.
 km_seeds$tot.withinss/km_seeds$betweenss #available after kmean(): tot.withinss = within sum of squares, betweenss = between cluster sum of squares
-table(km_data$cluster, data$var) #compare clusters and actual data
+
+
 
 # Recursive partitioning (a.k.a. decision tree)
 library("rpart")

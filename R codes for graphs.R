@@ -15,6 +15,8 @@ abline(c(33,44)) # regression line of function y=33+44x
 reg-estimate <- lm(y-continuous-var ~ x-continuous-var, data = dataframe)
 abline(coefficients(reg-estimate))
 
+ggvis(data, ~var1, ~var2) # library(ggvis)
+
 ## scatter plot matrix
 pairs(formula = ~var1 + var2 + var3, data=dataframe)
 
@@ -45,15 +47,16 @@ ggplot(dataframe, aes(xvar, yvar)) + geom_boxplot() + geom_point() # xvar is cat
 ggplot(dataframe, aes(xvar, yvar)) + geom_boxplot() + geom_point() + facet_grid(. ~ catvar) # separated horizontally by catvar categories
 
 # scatter plot
-ggplot(dataframe, aes(xvar, yvar)) + geom_point()
-ggplot(dataframe, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points sized 5 and different shapes for each catvar categories
-ggplot(dataframe, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
-ggplot(dataframe, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
+ggplot(data = data, aes(x = xvar, y = yvar)) + geom_point()
+ggplot(data, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points sized 5 and different shapes for each catvar categories
+ggplot(data, aes(xvar, yvar, col = catvar)) + geom_point(size = 5) # points sized 5 and different colors for each catvar categories
+ggplot(data, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
+ggplot(data, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
 #ggplot() + geom_point(data = dataframe, aes(xvar, yvar, shape = catvar)) + geom_smooth(data = dataframe, aes(xvar, yvar), method = "lm") + facet_grid(rowvar ~ colvar)
-ggplot(dataframe, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
-ggplot(dataframe, aes(xvar, yvar)) + geom_point() + theme_bw() # black and white theme
+ggplot(data, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
+ggplot(data, aes(xvar, yvar)) + geom_point() + theme_bw() # black and white theme
 my_bw <- theme_bw() + theme(plot.title = element_text(size = rel(2.5)), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) # creates a new theme of whiteness and larger title font size, which can be used for ggplots --see next line
-ggplot(dataframe, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw theme --see previous line
+ggplot(data, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw theme --see previous line
 
 
 

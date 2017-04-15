@@ -5,14 +5,16 @@
 table(dataframe$var)
 prop.table(table(dataframe$var))
 cumsum(prop.table(table(dataframe$var)))
-diag(table(var1,var2))
+count(group_by(data, var)) #library(dplyr)
 
 ## two-way tabulation
 table(dataframe$var1, dataframe$var2)
 prop.table(table(dataframe$var1, dataframe$var2))
 addmargins(table(data$var1, data$var2))
+count(data, var1, var2) %>% spread(var2, n) #library(dplyr) and library(tidyr)
+count(data, var1, var2) %>% spread(var2, n) %>% mutate(ratio = cat1/(cat1 + cat2)) #creates a column for a ratio of those in cat1
 
-Deducer::frequencies(select(dataframe, var1, var2))
+#Deducer::frequencies(select(dataframe, var1, var2))
 
 library("gmodels")
 CrossTable(var1, var2, chisq = T, format = "SPSS") # or "SPSS"
@@ -33,6 +35,7 @@ sd(df$var)
 max(df$var)
 min(df$var)
 quantile(df$var, probs = .05) #5th percentile
+range(vector) #elements will be min and max of vector
 
 rowMeans(dataframe, na.rm = T)
 rowSums(dataframe, na.rm = T)
@@ -49,6 +52,16 @@ numSummary(select(dataframe, var1:var3), statistics = c("mean", "sd", "cv", "qua
 
 library("Hmisc")
 describe(dataframe) # or dataframe$var
+
+#using tapply
+freq <- tapply(data[,5], data[,1], length)
+mean <- tapply(data[[5]], data[[1]], mean)
+sd <- tapply(data[[5]], data[[1]], sd)
+total <- tapply(data[[5]], data[[1]], sum)
+summarydata <- data.frame(freq, mean, sd, total)
+
+tapply(data[[5]], data[[c(2,3)]], mean) #this is cross-tab of col 2 and 3 with mean of col 5. >by() is similar to tapply()?
+aggregate(var5 ~ var2 + var3, data, mean)
 
 ## correlation and covariance
 cov(dataframe$var1, dataframe$var2)
@@ -89,13 +102,23 @@ bayes.t.test(data$var1 ~ data$var2, paired = T)
 # df <- data.frame(one = c(35,632,346,234,4562,346,234,4634,292,546,345), two = c(482,35,346,456,23,443,634,6,53,234,2345))
 
 # ANOVA: if we compare more than two groups
-#car: companion to applied regression
-#library(car)
-leveneTest(var, factorvar) #anova test that variance of categories of factorvar is different
+#library(car) #companion to applied regression
+leveneTest(var, factorvar) #leveneTest is an anova test whether variance of categories of factorvar is different
 #parametric
-summary(aov(var, factorvar))
+summary(aov(var ~ factorvar))
 #nonparametric
 kruskal.test(var, factor)
+
+# pair-wise T-Test
+pairwise.t.test(var, factorvar)
+thsd <- TukeyHSD(aov(var ~ factorvar, data = data), na.rm = T) # group/multiple comparisons of mean of categories
+plot(thsd)
+
+# Pairwise Wilcoxon Rank Sum Test
+
+
+
+
 
 
 
