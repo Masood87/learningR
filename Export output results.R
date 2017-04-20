@@ -1,5 +1,10 @@
 ### exporting output results
 
+
+# export to csv
+write.csv(data, "file.csv")
+
+# professional outputs
 library(xtable)
 table(sap$z1)
 print(xtable(m1), type = "html", file = "heckhack.doc") #type = "LaTeX" alternatively

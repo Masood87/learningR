@@ -4,8 +4,8 @@ library(tidyr)
 
 # long and wide data
 df <- data.frame(id = c("x", "y"), a = c(2,3), b = c(4,6), c = c(2,5))
-long_df <- gather(df, keyvar, valvar, -id) # -id indicates we want to gather all columns except variable id. we can specify list of columns to gather without minus sign
-wide_df <- spread(long_df, keyvar, valvar)
+long_df <- gather(df, colnamevar, valuevar, -id) # -id indicates we want to gather all columns except variable id. we can specify list of columns to gather without minus sign
+wide_df <- spread(long_df, colnamevar, valuevar)
 
 # seperate and unite columns/variables
 df <- data.frame(id = rep(c("x","y"),times=3), 

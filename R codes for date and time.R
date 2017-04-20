@@ -38,3 +38,6 @@ quarters(as.Date("2000-01-01")) #or quarters(as.POSIXct("2000-01-01"))
 # %S: seconds as a decimal number
 # %T: shorthand notation for the typical format %H:%M:%S
 # %p: AM/PM indicator
+
+seq.Date()
+

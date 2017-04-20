@@ -52,6 +52,13 @@ numSummary(select(dataframe, var1:var3), statistics = c("mean", "sd", "cv", "qua
 
 library("Hmisc")
 describe(dataframe) # or dataframe$var
+smean.sd(df$var) #mean and sd
+smean.sdl(df$var, 2) # computes the mean plus or minus a constant times the standard deviation
+smean.cl.normal(df$var) # returns mean, upper and lower 95% confidence interval
+
+library(ggplot2)
+mean_sdl(df$var) # mean and sd
+mean_cl_normal(df$var) # mean and 95% CI
 
 #using tapply
 freq <- tapply(data[,5], data[,1], length)
