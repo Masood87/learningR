@@ -46,33 +46,32 @@ qqline(dataframe$var)
 library(ggplot2)
 
 ### scatter plot ###
-ggplot(data = data, aes(x = xvar, y = yvar)) + geom_point()
-ggplot(data, aes(factor(xvar), yvar)) + geom_point() # factor(xvar) treats xvar as factor, not continuous
-ggplot(data, aes(xvar, yvar, size = sizevar)) + geom_point() # size of points depend on value of sizevar
-ggplot(data, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points sized 5 and different shapes for each catvar categories
-ggplot(data, aes(xvar, yvar, col = catvar)) + geom_point(size = 5) # points sized 5 and different colors for each catvar categories
-ggplot(data, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
-ggplot(data, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
+ggplot(df = data, aes(x = xvar, y = yvar)) + geom_point() # if categorical, factor(xvar) treats xvar as factor, not continuous
+ggplot(df, aes(xvar, yvar, size = sizevar)) + geom_point() # or geom_point(size=sizevar)
+ggplot(df, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points sized 5 and different shapes for each catvar categories
+ggplot(df, aes(xvar, yvar, col = catvar)) + geom_point(size = 5) # points sized 5 and different colors for each catvar categories
+ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
+ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
 #ggplot() + geom_point(data = dataframe, aes(xvar, yvar, shape = catvar)) + geom_smooth(data = dataframe, aes(xvar, yvar), method = "lm") + facet_grid(rowvar ~ colvar)
 ggplot(data, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
 ggplot(data, aes(xvar, yvar)) + geom_point() + theme_bw() # black and white theme
 my_bw <- theme_bw() + theme(plot.title = element_text(size = rel(2.5)), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) # creates a new theme of whiteness and larger title font size, which can be used for ggplots --see next line
 ggplot(data, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw theme --see previous line
 
-ggplot(df, aes(xvar, yvar, size = var)) + # aes options: x, y, col, size, fill, alpha, label, group, and shape
-  geom_point(alpha = .4, size = 3, aes(size = var)) + # other options: shape, size, label (e.g. label="x"), alpha (transparency level), position = "jitter" / position_jitter(width=.1) adds noise to data points and used for when data points overlap each other
+ggplot(df, aes(xvar, yvar, size = var)) + # aes (global) options: x, y, col, size, fill, alpha, label, group, and shape
+  geom_point(alpha = .4, size = 3, aes(size = var)) + # other (local) options: shape, size, label (e.g. label="x"), alpha (transparency level), position = "jitter" / position_jitter(width=.1) adds noise to data points and used for when data points overlap each other
   geom_point(data = df2, size = 5, shape = 15) + # to add another layer of geom from another data frame
   geom_jitter() + # adds noise to data points and used for when data points overlap each other
   geom_text() + # when option label is used in aes() call within ggplot()
   geom_smooth(method = "lm", se = F, fullrange = T) + # other methods: "glm","gmm"-- multiple linear lines if size, shape or color specified in aes() call within ggplot()
   geom_smooth(method = "lm", se = F, linetype = 2, aes(group = 1)) + # aes(group=1) draws a single line for all data irrespective of size, shape or color which is specified in aes() call within ggplot(); in its absence, each category of colvar will have separate fitted lines
   facet_grid(. ~ facetvar) + # separates plots for each facet of facetvar, but share same y-axis. recommended for facetvar with limited categories
-  labs(x = "x label", y = "y label", col = "colvar") + 
+  labs(title = "graph title", x = "x label", y = "y label", col = "colvar") + # or use ggtitle("graph title") + xlab("x label") + ylab("y label")
   scale_x_continuous("continuous x-axis label", limits = c(2,3), breaks = seq(2,8,3), expand = c(0,0)) + # 
   scale_color_discrete("something", labels = c("this", "that", "there")) + # 
   scale_fill_manual("legend title", values = c("red", "blue"), lab = c("legend cat1", "legend cat2")) + 
   scale_color_manual("legend title", values = c("black", "yellow"), lab = c("category1", "category2")) + 
-  scale_color_gradient(colors = brewer.pal(9, "YlOrRd")) + 
+  scale_color_gradient(low = "yellow", high = "red", name = "Legend title") + # or: colors = brewer.pal(9, "YlOrRd")
   stat_quantile(quantiles = .5) + #
   stat_sum() + # calculates the count for each group
   stat_summary(fun.data = mean_sdl, fun.args = list(mult = 1), geom = "errorbar", width = .1) + # options: fun.data="mean_cl_normal"; geom="point","linerange" -- see smean.sdl() from Hmisc package
@@ -155,7 +154,89 @@ ggplot(as.data.frame(prop.table(table(dataframe$var-name))),
 
 
 
+## ## ## ## ## ## ## ##
+##### ggvis static ####
+## ## ## ## ## ## ## ##
+
+library(ggvis)
+#If you set or map a property inside ggvis() it will be applied globally , every layer in the graph will use the property. 
+#If you set or map a property inside a layer_<marks>() function it will be applied locally: only the layer created by the function will use the property. 
+#Where applicable, local properties will override global properties.
+ggvis(df, ~xvar, ~yvar, fill := "blue") %>% # fill=~fillvar, size=~sizevar
+  layer_points(opacity := .5, stroke := "black", shape := "diamond") %>% # others: strokeOpacity, andstrokeWidth
+  add_axis("y", title = "yaxis title", values = c(2,3,4,5), subdivide = 9, orient = "left") %>% # other orient: "bottom","right","top"
+  add_legend("fill", title = "legend title", orient = "right") %>% #example: add_legend(c("fill", "shape", "size"), title = "~ duration (m)")
+  layer_lines(stroke := "blue", strokeWidth := 3, strokeDash := 6) %>% # others: strokeOpacity, fill
+  layer_paths(fill := "darkorange") %>% # similar to lines, but useful when order dots is relevant, e.g. maps. layer_lines() options applies
+  layer_smooths() %>% # does the job of compute_model_prediction + ggvis layer_lines
+  layer_histograms(width = 5) %>% # with xvar only
+  layer_densities(fill := "green") %>% #this creates a density plot, and used instead of histogram to present distribution of data
+  layer_bars()  %>%
+  layer_model_predictions(model = "lm", stroke := "navy") %>% #adds linear line
+  scale_numeric("fill", range = c("red", "yellow")) %>% # scale of fill color from red to yellow, conditional that fill=~var is continuous
+  scale_nominal("stroke", range = c("darkred", "orange")) %>% # scale of stroke color to darkred to orange, conditional that fill=~var has two categories
+  scale_numeric("opacity", range = c(.2, 1)) %>% #opacity is the transparency of marks
+  scale_numeric("x", domain = c(0,6)) # to zoom in on the range of 0-6 on x-axis
 
 
+#use group_by from dplyr to make group-by plots
+df %>% group_by(var) %>% ggvis(~xvar, ~yvar, stroke = ~var) %>% layer_smooths()
+df %>% group_by(var1,var2) %>% ggvis(~xvar, ~yvar, stroke = ~interaction(var1,var2)) %>% layer_smooths()
+
+compute_count(df, ~var) %>% ggvis(x = ~x_, y = 0, y2 = ~count_, width = band()) %>% layer_rects() #= ggvis(df, ~var) %>% layer_bars()
+
+# for regression
+compute_model_prediction(df, depvar ~ indpvar, model = "lm") %>% #returns the x and y values of a line fitted to the data, model "loess" by default.
+  ggvis(~pred_, ~resp_) %>% layer_lines() %>% layer_points()
+
+
+
+## ## ## ## ## ## ## ## ## ##
+##### ggvis interactive #####
+## ## ## ## ## ## ## ## ## ##
+
+### examples: 
+#also input_checkbox() input_checkboxgroup()
+
+## 1. input_select double
+faithful %>%
+  ggvis(~waiting, ~eruptions, fillOpacity := 0.5,
+        shape := input_select(label = "Choose shape:",
+                              choices = c("circle", "square", "cross",
+                                          "diamond", "triangle-up", "triangle-down")),
+        fill := input_select(label = "Choose color:", 
+                             choices = c("black", "red", "blue", "green"))) %>%
+  layer_points()
+
+## 2. input_radiobuttons
+df %>%
+  ggvis(~var1, ~var2,
+        fill := input_radiobuttons(label = "Choose color:", 
+                                   choices = c("black", "red", "blue", "green"))) %>%
+  layer_points()
+
+## 3. input_text
+mtcars %>%
+  ggvis(~mpg, ~wt,
+        fill := input_text(label = "Choose color:",
+                           value = "black")) %>%
+  layer_points()
+
+## 4. map = as.name
+mtcars %>% 
+  ggvis(~mpg, ~wt, 
+        fill = input_select(label = "Choose fill variable:", 
+                            choices = names(mtcars), map = as.name)) %>% 
+  layer_points()
+
+## 5. input_numeric with default value = 1
+df %>% 
+  ggvis(~var) %>% 
+  layer_histograms(width = input_numeric(label = "Choose a binwidth:", value = 1))
+
+## 6. input_slider with min and max values
+df %>% 
+  ggvis(~var) %>% 
+  layer_histograms(width = input_slider(label = "Choose a binwidth:", min = 1, max = 100))
 
 

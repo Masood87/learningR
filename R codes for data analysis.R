@@ -89,6 +89,8 @@ anova(lm_model)
 plot(lm_model)
 predict(lm_model, newdata) #makes prediction based on lm_model on newdata. predict() can be used with regression tree, nueral network, etc. as well
 
+compute_model_prediction(df, depvar ~ indpvar, model = "lm") #returns the x and y values of a line fitted to the data. other: model="loess"
+
 
 ### comparing groups
 # for two independent groups

@@ -54,12 +54,14 @@ range(vector) #elements will be min and max of vector
 args(x)
 tolower() #lowercase
 cleaned_data <- na.omit(data_unclean) #removes all obs with missing values (NA)
+levels(df$factorvar) #provides the levels of a factor variable
 data$var <- droplevels(data$var) #in factor variable, drops/ removes all levels with 0 obs/count
 paste("var", 1:5, sep = "-") #creates var-1, var-2, var-3, var-4, var-5
 paste0("var", 1:5) #creates var1, var2, var3, var4, var5
 cat("text", mean(var)) #concatenate and print
 seq_along(data) #returns a vector of sequential numbers equal to elements of df or vector
 arrange(var1, var2) #from dplyr. Stata: sort var1 var2
+rank(var) #ranks the elements of var alphabetically or numerically
 abs(var) #absolute values of var
 round(var,1) #rounds to one decimal
 append(object, anything) #appends anything to an object and creates a list. Except if object=vector and anything=num, then output=vector
@@ -129,13 +131,10 @@ which(dataframe$var == 1) # return observation numbers of those that meet the co
 any(dataframe$var == 1) # returns T/F if there is any case that meets the condition
 all(dataframe$var == 1) # returns T/F if all cases meet the condition
 sum(dataframe$var == 1, na.rm = TRUE) # counts number of true cases that meet the condition, controlling for missing value
-# ==
-# <
-# >
-# <=
-# >=
-# !      Not
-# !=     Not equal
+
+## logical comparison: ==, <, >, <=, >=, !=, is.na, !is.na
+
+
 # &
 # |
 # &&

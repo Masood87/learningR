@@ -83,7 +83,7 @@ df <- read.spss("path/data.sav", use.value.labels = T, to.data.frame = T) #to.da
 library(RMySQL)
 library(DBI)
 
-#1. connecting with database, creating connection object con
+# connecting with database, creating connection object con
 con <- dbConnect(RMySQL::MySQL(),#MysQL() is the SQL driver we use to connect to database
                  dbname = "company", #another dbname = "tweater"
                  host = "courses.csrrinzqubik.us-east-1.rds.amazonaws.com", 
@@ -117,6 +117,14 @@ dbFetch(msg) #prints what remains from the first code
 dbDisconnect(db)
 dbDisconnect(con)
 
+
+### Set up a connection to the mysql database
+
+my_db <- src_mysql(dbname = "dplyr", 
+                   host = "courses.csrrinzqubik.us-east-1.rds.amazonaws.com", 
+                   port = 3306, 
+                   user = "student",
+                   password = "datacamp")
 
 
 
