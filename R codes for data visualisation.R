@@ -1,17 +1,22 @@
-############ Data Vis ############
+############ Data Visualization ############
+
+# interactive display of a df or matrix in nice tables
+library(DT)
+datatable(df) #beautiful interactive table in HTML
+datatable(df, rownames = F, colnames = c("firstcol", "secondcol"), filter = "top", caption = "Caption here")
 
 
-## ## ## ## ## ##
-##### Base-R  ###
-## ## ## ## ## ##
+## ## ## ## ## ## ##
+## ### Base-R ### ##
+## ## ## ## ## ## ##
 
 ### univariate charts
-stripchart(df$var1)
-barplot(prop.table(table(dataframe$var)))
+stripchart(df$var)
+barplot(prop.table(table(df$var)))
 hist(df$var)
 
 ## barplot
-barplot(prop.table(table(dataframe$var1, dataframe$var2))) #cross-tab
+barplot(prop.table(table(df$var1, df$var2))) #cross-tab
 
 ## scatter plot
 plot(yvar ~ xvar, data = df) # or plot(df$xvar, df$yvar)
@@ -22,21 +27,19 @@ plot(yvar ~ xvar, data = df,
 grid() # adds a grid to plot
 
 abline(c(33,44), lty = 1) # regression line of function y=33+44x. lty = line type
-reg-estimate <- lm(y-continuous-var ~ x-continuous-var, data = dataframe)
+reg-estimate <- lm(depvar ~ indpvar, data = df) # linear regression
 abline(coefficients(reg-estimate))
 
-ggvis(data, ~var1, ~var2) # library(ggvis)
-
 ## scatter plot matrix
-pairs(formula = ~var1 + var2 + var3, data=dataframe)
+pairs(formula = ~var1 + var2 + var3, data=df)
 
 ## box plot
-boxplot(dataframe$scatter-var, main = "Chart title", ylab = "y axis label", xlab = "x axis label", horizontal=TRUE, las = 1)
-boxplot(dataframe$scatter-var ~ dataframe$cross-var1 + dataframe$cross-var2)
+boxplot(df$scatvar, main = "Chart title", ylab = "y axis label", xlab = "x axis label", horizontal=TRUE, las = 1)
+boxplot(df$scatvar ~ df$var1 + df$var2)
 
 ## Distribution of data using Q–Q plot (normal distribution)
-qqnorm(dataframe$var, main = "Chart title", ylab = "y axis label", xlab = "x axis label")
-qqline(dataframe$var)
+qqnorm(df$var, main = "Chart title", ylab = "y axis label", xlab = "x axis label")
+qqline(df$var)
 
 
 ## ## ## ## ## ##
@@ -52,11 +55,11 @@ ggplot(df, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points size
 ggplot(df, aes(xvar, yvar, col = catvar)) + geom_point(size = 5) # points sized 5 and different colors for each catvar categories
 ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
 ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
-#ggplot() + geom_point(data = dataframe, aes(xvar, yvar, shape = catvar)) + geom_smooth(data = dataframe, aes(xvar, yvar), method = "lm") + facet_grid(rowvar ~ colvar)
-ggplot(data, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
-ggplot(data, aes(xvar, yvar)) + geom_point() + theme_bw() # black and white theme
+#ggplot() + geom_point(df = dataframe, aes(xvar, yvar, shape = catvar)) + geom_smooth(data = df, aes(xvar, yvar), method = "lm") + facet_grid(rowvar ~ colvar)
+ggplot(df, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
+ggplot(df, aes(xvar, yvar)) + geom_point() + theme_bw() # black and white theme
 my_bw <- theme_bw() + theme(plot.title = element_text(size = rel(2.5)), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank()) # creates a new theme of whiteness and larger title font size, which can be used for ggplots --see next line
-ggplot(data, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw theme --see previous line
+ggplot(df, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw theme --see previous line
 
 ggplot(df, aes(xvar, yvar, size = var)) + # aes (global) options: x, y, col, size, fill, alpha, label, group, and shape
   geom_point(alpha = .4, size = 3, aes(size = var)) + # other (local) options: shape, size, label (e.g. label="x"), alpha (transparency level), position = "jitter" / position_jitter(width=.1) adds noise to data points and used for when data points overlap each other
@@ -92,15 +95,15 @@ ggplot(df, aes(var, fill = fillvar)) +
   geom_bar(position = position_dodge(.2), alpha = .6) + # options: position="dodge","fill","stack","identity"
   scale_fill_brewer(palette = "Set1")
 
-ggplot(dataframe, aes(xyz = var)) + geom_bar() # barchart of frequencies of var, with x-axis label = xyz
-ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar() # barchart of xvar stacked with categories of yvar = geom_bar(position = "stack")
-ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar(position = "stack") # stacked with categories of yvar
-ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar(position = "dodge") # side-by-side with categories of yvar
-ggplot(dataframe, aes(xvar)) + geom_bar() + facet_grid(yvar ~ .) # barchart of xvar for each category of yvar in separate rows
-ggplot(dataframe, aes(xvar)) + geom_bar() + facet_grid(. ~ yvar) # barchart of xvar for each category of yvar in separate columns
+ggplot(df, aes(xyz = var)) + geom_bar() # barchart of frequencies of var, with x-axis label = xyz
+ggplot(df, aes(xvar, fill = yvar)) + geom_bar() # barchart of xvar stacked with categories of yvar = geom_bar(position = "stack")
+ggplot(df, aes(xvar, fill = yvar)) + geom_bar(position = "stack") # stacked with categories of yvar
+ggplot(df, aes(xvar, fill = yvar)) + geom_bar(position = "dodge") # side-by-side with categories of yvar
+ggplot(df, aes(xvar)) + geom_bar() + facet_grid(yvar ~ .) # barchart of xvar for each category of yvar in separate rows
+ggplot(df, aes(xvar)) + geom_bar() + facet_grid(. ~ yvar) # barchart of xvar for each category of yvar in separate columns
 #library("RColorBrewer")
 display.brewer.all(n=4) # show color patterns for four categories
-ggplot(dataframe, aes(xvar, fill = yvar)) + geom_bar(position = "stack") + scale_fill_brewer(palette = "Set1") # use custom colors
+ggplot(df, aes(xvar, fill = yvar)) + geom_bar(position = "stack") + scale_fill_brewer(palette = "Set1") # use custom colors
 
 ggplot(df, aes(xvar, yvar, fill = factor(fillvar))) + 
   geom_bar(position = "dodge") + # or position= "stack", "fill", 
@@ -129,8 +132,8 @@ ggplot(df, aes(sample = var)) + stat_qq() + geom_abline(aes(slope = slope, inter
 
 
 # boxplot
-ggplot(dataframe, aes(xvar, yvar)) + geom_boxplot() + geom_point() # xvar is categorical and yvar is continuous
-ggplot(dataframe, aes(xvar, yvar)) + geom_boxplot() + geom_point() + facet_grid(. ~ catvar) # separated horizontally by catvar categories
+ggplot(df, aes(xvar, yvar)) + geom_boxplot() + geom_point() # xvar is categorical and yvar is continuous
+ggplot(df, aes(xvar, yvar)) + geom_boxplot() + geom_point() + facet_grid(. ~ catvar) # separated horizontally by catvar categories
 
   
 
@@ -144,7 +147,7 @@ qplot(xvar, yvar, data = df, size = 3, col = colvar,
 ##### Graphics resources: http://R-Bloggers.com, http://ggplot2.org, http://groups.google.com/group/ggplot2, Hadley Wickham's book Elegant Graphics for Data Analysis, Muenchen and Hilbe's book R for Stata Users
 
 
-ggplot(as.data.frame(prop.table(table(dataframe$var-name))), 
+ggplot(as.data.frame(prop.table(table(df$var))), 
       aes(x=Var1, y = Freq, 
       label=sprintf("%0.2f", round(Freq, digits = 2)))) + 
       geom_bar(stat="identity", fill='grey', colour = 'black') + 
@@ -238,5 +241,17 @@ df %>%
 df %>% 
   ggvis(~var) %>% 
   layer_histograms(width = input_slider(label = "Choose a binwidth:", min = 1, max = 100))
+
+
+
+## ## ## ## ## ## ## ## ## ##
+#### plotly interactive #####
+## ## ## ## ## ## ## ## ## ##
+
+library(plotly)
+plot_ly(df, x = xvar, y = yvar, mode = "markers") #mode = "lines"
+
+
+library(leaflet)
 
 

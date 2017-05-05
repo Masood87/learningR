@@ -4,21 +4,21 @@ library(dplyr)
 # filter and arrange manipulates obs
 # summarize manipulate groups
 
-glimpse(df)
-tbl_df(dataFrame) # nice way to display data.frame
+glimpse(df) # improved version of str() to display the structure of a data.frame
+tbl_df(df) # nice way to display data.frame
 
 
-select(df, gender, q1:q5) #make a subset of gender, q1 through q5 in df
-select(df, 1:5, 11) #select 1st through fifth and 11th variables in df
-select(df, starts_with("a"), #every name that starts with "X"
-       ends_with("y"), #every name that ends with "X"
-       contains("x"), #every name that contains "X"
-       matches("hi"), #every name that matches "X", where "X" can be a regular expression
+select(df, var1, var11:var15) #select a subset of var1, var11 through var15 frome df
+select(df, 1:5, 11) #select a subsect of 1st through fifth and 11th columns in df
+select(df, starts_with("a"), #every name that starts with "a"
+       ends_with("y"), #every name that ends with "y"
+       contains("x"), #every name that contains "x"
+       matches("hi"), #every name that matches "hi", where "hi" can be a regular expression
        num_range("x", 1:5), #the variables named x01, x02, x03, x04 and x05
        one_of(x)) #every name that appears in x, which should be a character vector
 
 
-mutate(df, newvar1 = var1 - var2, newvar2 = var1 * var2) # other math functions too
+mutate(df, newvar1 = var1 - var2, newvar2 = var1 * var2) # creats new variables. other math functions applicable too
 #creating a categorical variable from continous/discrete variable
 mutate(data, newvar = ifelse(var<30, "label1", ifelse(var<50, "label2", "label3")))
 
