@@ -105,7 +105,8 @@ seq(from = 100, to = 11, by = -10) # or seq(2,8,3)
 rep(3:6, times = 5) #creates a vector of 3 to 6 repeated 5 times
 sort(rep(3:6, times = 2), decreasing = TRUE) #orders the vector of 3 to 6 repeated 5 times (6,6,5,5,4,4,3,3)
 data.frame(one = c(1,3,4), two = c(4,5,3)) #creates a data frame with two columns: one, two
-
+letters[1:4] #returns alphabet letters a, b, c and d
+LETTERS[11:4] #returns letters in capital and reverse
 
 # creating factor from numeric variable
 data$fac_var <- factor(data$num_var, labels=c("label_one", "label_two", ..., "label_last"))
@@ -118,7 +119,7 @@ colnames(data)[2:3] <- c("var2", "var3")
 rownames(data) <- c("one", "two", "three",...)
 dimnames(data) <- list(c("one", "two", "three", ...), c("var1", "var2", ...)) #combines colname and rowname. note, first is rowname
 data <- matrix(data, byrow = T, nrow = 3, dimnames = list(c("one", "two", "three"), c("var1", "var2")))
-
+setnames(DT, "A", "a") #renames column A to a --library(data.table)
 
 # saving data in .RData format
 save(dataframe, file = "directory/filename.RDtata")
@@ -167,9 +168,11 @@ data[which.max(data$var), ] #for min: data[which.min(data$var), ]
 sum(data, na.rm = T)
 rowSums(data, na.rm = T)
 colSums(data, na.rm = T)
+cumsum(data$var)
 
 ### ordering data
 order(var1) #shows the order index
+order(-var) #descending order
 var1[order(var1)] #shows the order values
 data[order(var1), ] #sort the data frame in order of smallest to largest var1
 
@@ -256,6 +259,12 @@ mat %>% walk(hist) %>% map(summary)
 ### creating a categorical variable from continous/discrete variable
 mutate(data, newvar = ifelse(var<30, "label1", ifelse(var<50, "label2", "label3")))
 
+
+### bind, combine, merge
+rbind(df, df2) # df and df2 have similar colnames
+rbind.fill(df, df2 ) # df and df2 have non-similar colnames
+bind_rows(df, df2) # rbind from library(dplyr) 
+smartbind(df, df2) # rbind from library(gtools)
 
 
 ### with and within
