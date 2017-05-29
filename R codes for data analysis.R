@@ -30,6 +30,7 @@ summary(filter(dataframe, var==1)) # Stata: sum * if var==1
 summary(subset(dataframe$var1, var2 == 1)) # Stata: sum var1 if var2==1
 
 mean(data$var)
+colMeans(data) #mean of each column in data
 median(df$var)
 sd(df$var)
 max(df$var)

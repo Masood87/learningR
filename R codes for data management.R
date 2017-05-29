@@ -78,6 +78,9 @@ t.data.frame(df) #transposes the dataframe
 
 
 ### regular expressions (?regex)
+# Since regular expressions can be tricky, here is a quick refresher:
+# Metacharacters allow you to match certain types of characters. For example, . means any single character, ^ means "begins with", and $ means "ends with".
+# If you want to use any of the metacharacters as actual text, you need to use the \\ escape sequence.
 grep(pattern = "a", x = vect) #returns numeric vector of indices of elements of vect that has "a" in them
 grep(pattern = "^a", x = vect) #returns numeric vector of indices of elements of vect that starts with "a"
 grep(pattern = "a$", x = vect) #returns numeric vector of indices of elements of vect that ends with "a"

@@ -42,9 +42,9 @@ qqnorm(df$var, main = "Chart title", ylab = "y axis label", xlab = "x axis label
 qqline(df$var)
 
 
-## ## ## ## ## ##
-#### ggplot2  ###
-## ## ## ## ## ##
+## ## ## ## ## ## ##
+## ## ggplot2  ## ##
+## ## ## ## ## ## ##
 
 library(ggplot2)
 
@@ -253,5 +253,14 @@ plot_ly(df, x = xvar, y = yvar, mode = "markers") #mode = "lines"
 
 
 library(leaflet)
+
+
+
+
+
+
+#for SAP
+leave <- data.table(region = c("CENTRAL/ KABUL", "EAST", "SOUTH EAST", "WEST", "NORTH EAST", "CENTRAL/ HAZARAJAT", "NORTH WEST", "CENTRAL/ KABUL"),
+                    leave = c(36.14, 25.78, 29.25, 17.77, 22.98, 37.08, 28.70, 28.99))
 
 

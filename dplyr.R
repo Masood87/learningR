@@ -1,3 +1,4 @@
+
 library(dplyr)
 
 # select and mutate manipulates variables
@@ -8,7 +9,7 @@ glimpse(df) # improved version of str() to display the structure of a data.frame
 tbl_df(df) # nice way to display data.frame
 
 
-select(df, var1, var11:var15) #select a subset of var1, var11 through var15 frome df
+select(df, var1, var11:var15) #select a subset of var1, var11 through var15 from df
 select(df, 1:5, 11) #select a subsect of 1st through fifth and 11th columns in df
 select(df, starts_with("a"), #every name that starts with "a"
        ends_with("y"), #every name that ends with "y"
