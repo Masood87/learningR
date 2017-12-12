@@ -23,6 +23,7 @@ class(object)
 typeof(object)
 ls() #lists objects
 ls.str() #lists objects and their structure. ls() + str()
+tbl_df(df) # nice way to display data.frame
 
 ### is. and as.
 is.na(object) #returns a logical vector whether missing value
@@ -47,8 +48,8 @@ na.omit(df) #automatically removes cases/rows with missing values
 
 
 ###
-ncol(data)
-nrow(data)
+ncol(data) #number of columns/variables
+nrow(data) #number of rows
 vector <- vector("double", 44) #creates empty vector double with 44 elements. other options: "integer", "logical", "character"
 range(vector) #elements will be min and max of vector
 args(x)
@@ -70,11 +71,12 @@ strsplit(vector, split = " ") #splits elements of vector by space, and output a 
 diff(vect) #difference between elements of a numerical or date vector
 x <- list(a = 1, b = list(c = 3, d = 4)) #to refer to an element of a list within list: x[[c("b","c")]] or x[[c(2,1)]]
 mutate_each(df, funs(as.numeric), var4:var10) #changes class to numeric for variables var4 through var10
+count(diamonds, cut, clarity, color) #return count of each combination in dataset diamonds
 
-
-### transpose
+### transforming data
 t(obj) #generic function to transpose
 t.data.frame(df) #transposes the dataframe
+aggregate(var1 ~ byvar, FUN = sum, data = df)
 
 
 ### regular expressions (?regex)
@@ -123,9 +125,10 @@ rownames(data) <- c("one", "two", "three",...)
 dimnames(data) <- list(c("one", "two", "three", ...), c("var1", "var2", ...)) #combines colname and rowname. note, first is rowname
 data <- matrix(data, byrow = T, nrow = 3, dimnames = list(c("one", "two", "three"), c("var1", "var2")))
 setnames(DT, "A", "a") #renames column A to a --library(data.table)
+rename(df, newname = oldname) #renames variable. library(dplyr)
 
 # saving data in .RData format
-save(dataframe, file = "directory/filename.RDtata")
+save(dataframe, file = "directory/filename.RData")
 load("directory/filename.RData")
 
 
@@ -154,15 +157,14 @@ subset <- subset(data, subset = var2 > 1)
 subset <- select(dataframe, gender, q1:q5) # dplyr package
 subset <- filter(subset, gender == "f") # dplyr package
 
-data2 <- mutate(data, var1 = var1+var2, var2 = var1/var2) # dplyr package
-
 code <- c("AF", "US")
 country <- c("AF" = "Afghanistan", "US" = "United States", "IN" = "India")
 subset <- country[code] # country's labels to apply on code!
 
-# creating a subset of data
 subsetdata <- subset(data, select = c("var1", "var2", "var3"))
+subset_y <- y[c("c","d")] #subsets y and assigns to subset_y
 
+data2 <- mutate(data, var1 = var1+var2, var2 = var1/var2) # dplyr package
 # minimum and maximum
 max(vect) # or min(vect)
 data[which.max(data$var), ] #for min: data[which.min(data$var), ]
@@ -264,11 +266,17 @@ mutate(data, newvar = ifelse(var<30, "label1", ifelse(var<50, "label2", "label3"
 
 
 ### bind, combine, merge
+merge(x, y, by = "var", all.x = T, all.y = F) #joins x and y dataframes and include nonmatching rows (similar to left_join in dplyr)
+merge(x, y, by = "var", all = T) #equivalent of full_join in dplyr. all = F equivalent of inner_join in dplyr
 rbind(df, df2) # df and df2 have similar colnames
 rbind.fill(df, df2 ) # df and df2 have non-similar colnames
-bind_rows(df, df2) # rbind from library(dplyr) 
+bind_rows(df, df2) # rbind from library(dplyr), top of each other, equivalent of append
 smartbind(df, df2) # rbind from library(gtools)
 
+merge(dt1, dt2, by = "var", all = T)
+x <- data.table(x, setkey = "var") # library(data.table)
+y <- data.table(y, setkey = "var")
+merge(x,y)
 
 ### with and within
 with(data, var1 - var2) #difference between var1 and var2 in data
@@ -276,9 +284,9 @@ within(data, {newvar <- var1 - var2}) #creates newvar in data, which is differen
 
 ### packages
 search() #lists the attached packages in R
-library(package) #attack a package
+library(package) #attach a package
 install.packages("package") #installs a package
-require(package) #attack a package, but unlike library ..
+require(package) #attach a package, but unlike library ..
 
 
 ### dont know what this is for now

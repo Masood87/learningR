@@ -97,11 +97,46 @@ points(predNile$pred, type = "l", col = 2) #adds the prediction
 points(predNile$pred + predNile$se*2, type = "l", col = 2, lty = 2) #adds the 95% CI upper bound
 points(predNile$pred - predNile$se*2, type = "l", col = 2, lty = 2) #adds the 95% CI lower bound
 
+# Moving-average (MA)
+# Today = mean + Noise + Slope*(Yesterday's Noise)
+# Y_t = m + e_t + th*e_t-1     where e_t ~ WhiteNoise(0, sigma^2)
+arima.sim(model = list(ma = 0.5), n = 10) %>% plot.ts()
+arima(Nile, order = c(0,0,1))
+# Call:
+# arima(x = Nile, order = c(0, 0, 1))
+# 
+# Coefficients:
+#          ma1  intercept
+#       0.3783   919.2433
+# s.e.  0.0791    20.9685
+# 
+# sigma^2 estimated as 23272:  log likelihood = -644.72,  aic = 1295.44
+# > > > RESULT: slope(theta th) = 0.3783, intercept (mean) = 919.2433, sigma^2 = 23272
+
+## Information Criteria AIC and BIC
+AIC(x)
+BIC(x)
+
+## How to tell MA, AR, RW, WN series
+arima.sim(model = list(ma = 0.5), n = 100) %>% ts.plot()
+# Series A shows short-run dependence but reverts quickly to the mean, so it must be the MA model. 
+arima.sim(model = list(ar = 0.5), n = 100) %>% ts.plot()
+arima.sim(model = list(order = c(0,1,0)), n = 100) %>% ts.plot()
+# Series B and C are consistent with AR and RW, respectively.
+arima.sim(model = list(order = c(0,0,0)), n = 100) %>% ts.plot()
+# Series D does not show any clear patterns, so it must be the WN model.
+
+arima.sim(model = list(ma = 0.5), n = 100) %>% acf()
+# Plot A shows autocorrelation for the first lag only, which is consistent with the expectations of the MA model. 
+arima.sim(model = list(ar = 0.5), n = 100) %>% acf()
+# Plot B shows dissipating autocorrelation across several lags, consistent with the AR model. 
+arima.sim(model = list(order = c(0,1,0)), n = 100) %>% acf()
+# Plot C is consistent with a RW model with considerable autocorrelation for many lags.
+arima.sim(model = list(order = c(0,0,0)), n = 100) %>% acf()
+# Plot D shows virtually no autocorrelation with any lags, consistent with a WN model.
+
+
 #
-
-
-
-
 
 
 
@@ -158,6 +193,27 @@ points(predNile$pred - predNile$se*2, type = "l", col = 2, lty = 2) #adds the 95
 #   To make predictions for several periods beyond the last observations, you can use the n.ahead argument in your predict() command. This argument establishes the forecast horizon (h), or the number of periods being forceast. The forecasts are made recursively from 1 to h-steps ahead from the end of the observed time series.
 #   In this exercise, you'll make simple forecasts using an AR model applied to the Nile data, which records annual observations of the flow of the River Nile from 1871 to 1970.
 
+
+### << Moving-average >> 
+
+#Simulate the simple moving average model
+# The simple moving average (MA) model is a parsimonious time series model used to account for very short-run autocorrelation. It does have a regression like form, but here each observation is regressed on the previous innovation, which is not actually observed. Like the autoregressive (AR) model, the MA model includes the white noise (WN) model as special case.
+# As with previous models, the MA model can be simulated using the arima.sim() command by setting the model argument to list(ma = theta), where theta is a slope parameter from the interval (-1, 1). Once again, you also need to specifcy the series length using the n argument.
+
+#Estimate the autocorrelation function (ACF) for a moving average
+# You can use the acf() command to generate plots of the autocorrelation in your MA data.
+
+#Estimate the simple moving average model
+# fit the simple moving average (MA) model to some data using the arima() command. For a given time series x we can fit the simple moving average (MA) model using arima(..., order = c(0, 0, 1)). Note for reference that an MA model is an ARIMA(0, 0, 1) model.
+
+#Simple forecasts from an estimated MA model
+# Now that you've estimated a MA model with your Nile data, the next step is to do some simple forecasting with your model. As with other types of models, you can use the predict() function to make simple forecasts from your estimated MA model. Recall that the $pred value is the forecast, while the $se value is a standard error for that forecast, each of which is based on the fitted MA model.
+# Once again, to make predictions for several periods beyond the last observation you can use the n.ahead = h argument in your call to predict(). The forecasts are made recursively from 1 to h-steps ahead from the end of the observed time series. However, note that except for the 1-step forecast, all forecasts from the MA model are equal to the estimated mean (intercept).
+
+#AR vs MA models
+# Autoregressive (AR) and simple moving average (MA) are two useful approaches to modeling time series. But how can you determine whether an AR or MA model is more appropriate in practice?
+# To determine model fit, you can measure the Akaike information criterion (AIC) and Bayesian information criterian (BIC) for each model. While the math underlying the AIC and BIC is beyond the scope of this course, for your purposes the main idea is these these indicators penalize models with more estimated parameters, to avoid overfitting, and smaller values are preferred. All factors being equal, a model that produces a lower AIC or BIC than another model is considered a better fit.
+# To estimate these indicators, you can use the AIC() and BIC() commands, both of which require a single argument to specify the model in question.
 
 
 

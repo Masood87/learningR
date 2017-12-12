@@ -2,26 +2,26 @@
  ########## # # # # # #########
 
 ## one-way tabulation
-table(dataframe$var)
-prop.table(table(dataframe$var))
+table(df$var)
+prop.table(table(df$var))
 cumsum(prop.table(table(dataframe$var)))
 count(group_by(data, var)) #library(dplyr)
 
 ## two-way tabulation
-table(dataframe$var1, dataframe$var2)
-prop.table(table(dataframe$var1, dataframe$var2))
-addmargins(table(data$var1, data$var2))
-count(data, var1, var2) %>% spread(var2, n) #library(dplyr) and library(tidyr)
-count(data, var1, var2) %>% spread(var2, n) %>% mutate(ratio = cat1/(cat1 + cat2)) #creates a column for a ratio of those in cat1
+table(df$var1, df$var2)
+prop.table(table(df$var1, df$var2))
+addmargins(table(df$var1, df$var2))
+count(df, var1, var2) %>% spread(var2, n) #library(dplyr) and library(tidyr)
+count(df, var1, var2) %>% spread(var2, n) %>% mutate(ratio = cat1/(cat1 + cat2)) #creates a column for a ratio of those in cat1
 
-#Deducer::frequencies(select(dataframe, var1, var2))
+#Deducer::frequencies(select(df, var1, var2))
 
 library("gmodels")
 CrossTable(var1, var2, chisq = T, format = "SPSS") # or "SPSS"
 CrossTable(var1, var2, prop.r = T, prop.c = T, prop.t = T, chisq = T, format = "SAS") # prop.r = row proportion
 
-chisq.test(table(data$var1, data$var2)) # var2 should have only two categories, like gender
-summary(table(data$var1, data$var2)) # provides Pearson's Chi-Squared test, number of observations and number of factors
+chisq.test(table(df$var1, df$var2)) # var2 should have only two categories, like gender
+summary(table(df$var1, df$var2)) # provides Pearson's Chi-Squared test, number of observations and number of factors
 
 ## descriptive statistics
 summary(dataframe$var)
@@ -29,8 +29,7 @@ summary(dataframe[dataframe$var == 1, ]) # Stata: sum * if var==1
 summary(filter(dataframe, var==1)) # Stata: sum * if var==1
 summary(subset(dataframe$var1, var2 == 1)) # Stata: sum var1 if var2==1
 
-mean(data$var)
-colMeans(data) #mean of each column in data
+mean(df$var)
 median(df$var)
 sd(df$var)
 max(df$var)
@@ -42,6 +41,7 @@ rowMeans(dataframe, na.rm = T)
 rowSums(dataframe, na.rm = T)
 colMeans(dataframe, na.rm = T)
 colSums(dataframe, na.rm = T)
+sapply(dataframe, sum, na.rm = T)  # the same as colSum(df, na.rm = T)
 
 summary(dataframe, contains("var"), na.rm = T) # returns summary statistics for variables whose name contains "var"
 
@@ -89,6 +89,8 @@ summary(lm_model)
 anova(lm_model)
 plot(lm_model)
 predict(lm_model, newdata) #makes prediction based on lm_model on newdata. predict() can be used with regression tree, nueral network, etc. as well
+
+tidy(lm_model) #prepares a small tidy dataset with result of lm() from library(broom)
 
 compute_model_prediction(df, depvar ~ indpvar, model = "lm") #returns the x and y values of a line fitted to the data. other: model="loess"
 

@@ -1,4 +1,4 @@
-### dates and times: with lubridate, zoo, xts
+  ### dates and times: with lubridate, zoo, xts
 
 # library(lubridate)
 ymd("2010 Sep 10") # or ymd("2010/Sep/10"), ymd("2010-Sep-10"), ymd("2010-01-18")

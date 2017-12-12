@@ -5,6 +5,7 @@
 
 ### importing data
 read.csv("path/data", stringsAsFactors = F) # stringsAsFactors = T converts string data to factors
+write.csv(sap2, "AGSAP.csv", na = "", row.names = F, col.names = T)
 read.delim("path/data", stringsAsFactors = F)
 read.delim("path/data", colClasses = c("numeric", "factor", "character", "logical")) # if colClasses = "NULL", it skips loading into dataframe. Use colClasses instead of stringsAsFactors
 read.table("path/data", header = T, sep = "/", stringsAsFactors = F) #use "\t" for tab separated data
@@ -61,9 +62,9 @@ removeSheet(workbook, sheet = "sheetname") #deletes sheet from XLConnect workboo
 library(haven)
 #from SAS
 read_sas("data.sas7bdat")
-#from SAS
+#from Stata
 sap <- read_stata("/Users/macbookair/Dropbox/SAP 2016/STATA-2006-1016_data_and_codebook/SAP Data 2006-2016.dta")
-sap <- read_stata("/Users/macbookair/Dropbox/SAP 2016/STATA-2006-1016_data_and_codebook/SAP Data 2006-2016.dta")
+sap <- read_stata("/Users/macbookair/Downloads/SAP 2017/data/TAF Merge W1-12 Client Version v3.dta")
 as.character(as_factor(data$labeledvar)) #to convert Stata's labeled variables to factors and then characters in R
 #from SPSS
 read_spss("path/data.")

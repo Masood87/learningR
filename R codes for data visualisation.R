@@ -2,7 +2,7 @@
 
 # interactive display of a df or matrix in nice tables
 library(DT)
-datatable(df) #beautiful interactive table in HTML
+datatable(x) #beautiful interactive table in HTML
 datatable(df, rownames = F, colnames = c("firstcol", "secondcol"), filter = "top", caption = "Caption here")
 
 
