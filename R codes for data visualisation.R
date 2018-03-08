@@ -121,7 +121,14 @@ ggplot(df, aes(xvar, yvar, col = colvar)) + # options: linetype = var, size = va
   geom_area(position = "fill") + # options: position="fill" (use with fill=var in aes() call in ggplot)
   geom_ribbon(aes(ymax = capture, ymin = 0), alpha = .3) + # use when fill=var in aes() call in ggplot is used
   geom_rect(data = df2, inherit.aes = F, aes(xmin = begin, xmax = end, ymin = -Inf, ymax = Inf), fill = "red", alpha = .2) + # adding another layer of e.g. recession periods on top of line graph
-  geom_smooth(lwd = 2, se = F) # adds smoothing line
+  geom_smooth(lwd = 2, se = F) + # adds smoothing line
+  xlim(lim1, lim2) + # limits the x axis range and plots between lim1 and lim2
+  ylim(lim1, lim2) # limits the y axis range and plots between lim1 and lim2
+
+### date plots ###
+ggplot(df, aes(x, y)) + geom_line() + 
+  xlim(as.Date("2001-01-01"), as.Date("2002-01-01")) + #limits date to between Jan 1, 2001 and Jan 2, 2002
+  scale_x_date(date_breaks = "1 years", date_labels = "%Y")
 
 
 ### qq-plot ###

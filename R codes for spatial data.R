@@ -17,7 +17,7 @@ ggmap(kabul_map)
 # Similar to ggplot(), you can add layers of data to a ggmap() call (e.g. + geom_point()). It's important to note, however, that ggmap() sets the map as the default dataset and also sets the default aesthetic mappings.
 # This means that if you want to add a layer from something other than the map (e.g. sales), you need to explicitly specify both the mapping and data arguments to the geom.
 ggmap(kabul_map, base_layer = ggplot(places, aes(lon, lat, col = place))) + geom_point() #or ggmap(kabul_map) + geom_point(aes(lon, lat, col = place), data = places)
-# ggmap also provides a quick alternative to ggmap(). Like qplot() in ggplot2, qmplot() is less flexible than a full specification, but often involves significantly less typing. qmplot() replaces both steps -- downloading the map and displaying the map -- and its syntax is a blend between qplot(), get_map(), and ggmap().
+# qmplot also provides a quick alternative to ggmap(). Like qplot() in ggplot2, qmplot() is less flexible than a full specification, but often involves significantly less typing. qmplot() replaces both steps -- downloading the map and displaying the map -- and its syntax is a blend between qplot(), get_map(), and ggmap().
 qmplot(lon, lat, data = places, geom = "point", color = place)
 
 #Types of spatial data: point, line, polygon, raster (you have a variable measured at every location in a regular grid)

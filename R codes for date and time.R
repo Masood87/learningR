@@ -1,10 +1,19 @@
-  ### dates and times: with lubridate, zoo, xts
+### dates and times: with lubridate, zoo, xts
 
-# library(lubridate)
-ymd("2010 Sep 10") # or ymd("2010/Sep/10"), ymd("2010-Sep-10"), ymd("2010-01-18")
-mdy("Aug 22 2010") # or mdy("Aug,22,2010"), mdy("Aug_22_2010"), mdy("Aug.22.2010")
-hms("13-10-10") # or hms("13:10:10"), hms("13 10 10"), hms("13.10.10")
-# ymd_hms(), ymd_hm(), ymd_h(), year(), month(), day(), weekdays(), quarter()
+
+# dates (ISO 8601: YYYY-MM-DD... it doesn't have to be sep. by -):
+
+# as.Date() takes date in character string in ISO 8601 standard format and turns it as date object
+as.Date("2003-05-23")
+
+# packages that read date objects: readr, anytime
+anytime(c("September 10 2009", "Sep 11 2009", "10 Sep 2009", "1-09-2009", "2009-02-05"))
+
+# ISO 8601: HH:MM:MM
+# POSIXlt: list with named compoments
+# POSIXct: seconds since 1970-01-01 00:00:00
+# as.POSIXct() takes date-time in character string in ISO 8601 standard format and turns it into POSIXct object
+as.POSIXct("1970-01-01 00:00:00")
 
 Sys.Date() #prints current date
 Sys.time() #prints date and time, with time zone
@@ -40,4 +49,16 @@ quarters(as.Date("2000-01-01")) #or quarters(as.POSIXct("2000-01-01"))
 # %p: AM/PM indicator
 
 seq.Date()
+
+###### DataCamp: Working with Dates and Times in R (Charlotte Wickham) ######
+
+# lubridate
+
+# library(lubridate)
+ymd("2010 Sep 10") # or ymd("2010/Sep/10"), ymd("2010-Sep-10"), ymd("2010-01-18")
+mdy("Aug 22 2010") # or mdy("Aug,22,2010"), mdy("Aug_22_2010"), mdy("Aug.22.2010")
+hms("13-10-10") # or hms("13:10:10"), hms("13 10 10"), hms("13.10.10")
+parse_date_time(c("2007/02/01", "Sep 10, 2017", "27th Feb 2009"), orders = c("ymd", "mdy", "dmy"))
+# ymd_hms(), ymd_hm(), ymd_h(), year(), month(), day(), weekdays(), quarter()
+
 
