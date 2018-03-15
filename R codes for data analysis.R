@@ -3,6 +3,7 @@
 
 ## one-way tabulation
 table(df$var)
+count(df, var) #library(dplyr)
 prop.table(table(df$var))
 cumsum(prop.table(table(dataframe$var)))
 count(group_by(data, var)) #library(dplyr)

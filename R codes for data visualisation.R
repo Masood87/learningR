@@ -159,7 +159,15 @@ ggplot(as.data.frame(prop.table(table(df$var))),
       label=sprintf("%0.2f", round(Freq, digits = 2)))) + 
       geom_bar(stat="identity", fill='grey', colour = 'black') + 
       labs(x="p1price", y="Frequency") + 
-      geom_text(size = 3, hjust=1.2)+coord_flip()
+      geom_text(size = 3, hjust=1.2) + coord_flip()
+
+
+
+## ridgeline plot (formerly known as joyplot): http://blog.revolutionanalytics.com/2017/07/joyplots.html
+# library(ggridges)
+ggplot(df, aes(x = max_temp, y = month, height = ..density..)) +
+  geom_density_ridges(stat = "density")
+
 
 
 

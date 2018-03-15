@@ -13,6 +13,7 @@ library(dplyr)
 glimpse(df) # improved version of str() to display the structure of a data.frame
 tbl_df(df) # nice way to display data.frame
 
+count(df, var) #produces frequency table, similar to table() but better
 count(df, var1, var2) #calculate frequency of combination for categories of var1 and var2
 
 select(df, var1, var11:var15) #select a subset of var1, var11 through var15 from df

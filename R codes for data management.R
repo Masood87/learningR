@@ -282,6 +282,10 @@ merge(x,y)
 with(data, var1 - var2) #difference between var1 and var2 in data
 within(data, {newvar <- var1 - var2}) #creates newvar in data, which is difference between var1 and var2
 
+### test of speed of different functions with microbenchmark
+library(microbenchmark)
+microbenchmark(expression1, expression2, times = 20) #checks both expressions 20 times
+
 ### packages
 search() #lists the attached packages in R
 library(package) #attach a package
