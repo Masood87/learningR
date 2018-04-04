@@ -45,3 +45,14 @@ dt1 <- data.table(dt1, setkey = "var") # library(data.table)
 dt2 <- data.table(dt2, setkey = "var")
 merge(x,y)
 
+## joining
+(x <- data.table(a = 1:3, b = c("one", "two", "three")))
+(y <- data.table(a = 2:4, c = c("two", "three", "four")))
+x[y, on = "a"] #left join
+y[x, on = "a"] #right join
+y[x, on = "a", nomatch=0] #inner join
+y[!x, on = "a"] #right anti join
+x[!y, on = "a"] #left anti join
+
+
+DT[X, on="x", mult="first"] 
