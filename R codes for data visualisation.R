@@ -53,7 +53,7 @@ ggplot(df = data, aes(x = xvar, y = yvar)) + geom_point() # if categorical, fact
 ggplot(df, aes(xvar, yvar, size = sizevar)) + geom_point() # or geom_point(size=sizevar)
 ggplot(df, aes(xvar, yvar, shape = catvar)) + geom_point(size = 5) # points sized 5 and different shapes for each catvar categories
 ggplot(df, aes(xvar, yvar, col = catvar)) + geom_point(size = 5) # points sized 5 and different colors for each catvar categories
-ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds regression lines for each catvar categories
+ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") # adds linear regression lines for each catvar categories
 ggplot(df, aes(xvar, yvar, shape = catvar, linetype = catvar)) + geom_point(size = 5) + geom_smooth(method = "lm") + facet_grid(rowvar ~ colvar) # separated in rows by rowvar and in columns by colvar
 #ggplot() + geom_point(df = dataframe, aes(xvar, yvar, shape = catvar)) + geom_smooth(data = df, aes(xvar, yvar), method = "lm") + facet_grid(rowvar ~ colvar)
 ggplot(df, aes(xvar, yvar)) + geom_point() + labs(title="title", x="x label", y="y label") + theme(plot.title = element_text(size = rel(2.5))) # adds labels title title, x and y axis, and increase size of title by 2.5 times
@@ -64,7 +64,7 @@ ggplot(df, aes(xvar, yvar)) + geom_point() + my_bw # using customized my_bw them
 ggplot(df, aes(xvar, yvar, size = var)) + # aes (global) options: x, y, col, size, fill, alpha, label, group, and shape
   geom_point(alpha = .4, size = 3, aes(size = var)) + # other (local) options: shape, size, label (e.g. label="x"), alpha (transparency level), position = "jitter" / position_jitter(width=.1) adds noise to data points and used for when data points overlap each other
   geom_point(data = df2, size = 5, shape = 15) + # to add another layer of geom from another data frame
-  geom_jitter() + # adds noise to data points and used for when data points overlap each other
+  geom_jitter(width = .05, height = .05, alpha = .5) + # adds noise horizontally (width) or vertically (height) to data points and used for when data points overlap each other
   geom_text() + # when option label is used in aes() call within ggplot()
   geom_smooth(method = "lm", se = F, fullrange = T) + # other methods: "glm","gmm"-- multiple linear lines if size, shape or color specified in aes() call within ggplot()
   geom_smooth(method = "lm", se = F, linetype = 2, aes(group = 1)) + # aes(group=1) draws a single line for all data irrespective of size, shape or color which is specified in aes() call within ggplot(); in its absence, each category of colvar will have separate fitted lines
@@ -79,6 +79,9 @@ ggplot(df, aes(xvar, yvar, size = var)) + # aes (global) options: x, y, col, siz
   stat_sum() + # calculates the count for each group
   stat_summary(fun.data = mean_sdl, fun.args = list(mult = 1), geom = "errorbar", width = .1) + # options: fun.data="mean_cl_normal"; geom="point","linerange" -- see smean.sdl() from Hmisc package
   stat_summary(fun.y = mean, geom = "bar", fill = "skyblue") #
+
+ggplot(df, aes(x, y)) + geom_point() + coord_trans(x = "log10", y = "log10") #transforming x and y to their log10 and plot scatter point
+ggplot(df, aes(x, y)) + geom_point() + scale_x_log10() + scale_y_log10() #transforming x and y to their log10 and plot scatter point (same as above but different axis appearance)
 
 
 ### barplots ###
@@ -125,6 +128,13 @@ ggplot(df, aes(xvar, yvar, col = colvar)) + # options: linetype = var, size = va
   xlim(lim1, lim2) + # limits the x axis range and plots between lim1 and lim2
   ylim(lim1, lim2) # limits the y axis range and plots between lim1 and lim2
 
+ggplot() + geom_abline(intercept = 0, slope = 1) #an abline with slope and intercept parameters
+
+# regression lines in ggplot
+ggplot(df, aes(x, y)) + geom_point() + geom_smooth(method = "lm", se = F) # linear regression line
+ggplot(df, aes(x, y)) + geom_point() + geom_smooth(method = "glm", se = F, method.args = list(family = "binomial")) # binomial/logistic regression line
+
+
 ### date plots ###
 ggplot(df, aes(x, y)) + geom_line() + 
   xlim(as.Date("2001-01-01"), as.Date("2002-01-01")) + #limits date to between Jan 1, 2001 and Jan 2, 2002
@@ -169,8 +179,15 @@ ggplot(df, aes(x = max_temp, y = month, height = ..density..)) +
   geom_density_ridges(stat = "density")
 
 
-
-
+### visualize missing values in a tile plot
+# library(tidyverse)
+tileNAs <- function(x){
+  is.na(x) %>% data.frame() %>% mutate(row_n = 1:nrow(.)) %>% gather(var, is_miss, -row_n) %>%
+    ggplot(aes(var, row_n, fill = is_miss)) + geom_tile() + theme_bw() + scale_fill_discrete(name = "", labels = c("Present", "Missing")) +
+    theme(axis.text.x = element_text(angle = 90, vjust = .5)) + labs(x = "Variables in dataset", y = "Rows / observations") +
+    scale_x_discrete(position = "top")
+}
+tileNAs(df)
 
 ## ## ## ## ## ## ## ##
 ##### ggvis static ####

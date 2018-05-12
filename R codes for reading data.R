@@ -29,6 +29,7 @@ fread("path/data", select = c(1,5))
 fread("path/data", drop = c("var2", "var3", "var4"))
 fread("path/data", select = c("var1", "var5"))
 
+# excel file
 library(readxl)
 excel_sheets("path/data") #output name of sheets
 read_excel("path/data") #import first sheet by default
@@ -130,9 +131,10 @@ my_db <- src_mysql(dbname = "dplyr",
 
 
 ### HTTP: HyperText Transfer Protocol
-
 read.csv("https://s3.amazonaws.com/assets.datacamp.com/course/importing_data_into_r/states.csv")
 
+### text
+read_lines("text.txt") #library(tidyverse)
 
 ### json
 library(jsonlite)
@@ -143,6 +145,10 @@ fromJSON(json2)
 toJSON(object, pretty = T) #pretty or mini format of JSON
 minify(jsonobj)
 prettify(jsonobj)
+
+df <- read_json("db.json") #imports json file as list... if simplifyVector = T, then it'll coerce into data.frame (didn't work)
+capture.output(str(jsonobj))[1:15] #prints nicely
+
 
 ### downloading files from web
 url <- ("https://s3.amazonaws.com/assets.datacamp.com/course/importing_data_into_r/states.csv") # we can have two urls

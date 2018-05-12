@@ -72,28 +72,72 @@ summarydata <- data.frame(freq, mean, sd, total)
 tapply(data[[5]], data[[c(2,3)]], mean) #this is cross-tab of col 2 and 3 with mean of col 5. >by() is similar to tapply()?
 aggregate(var5 ~ var2 + var3, data, mean)
 
-## correlation and covariance
+# correlation and covariance
 cov(dataframe$var1, dataframe$var2)
 cor(dataframe$var1, dataframe$var2)
 cor(select(data, var1:var4), method = "pearson", use = "pairwise") #pairwise correlation of var1 through var4
 cor.test(data$var1, data$var4, use = "pairwise") #pairwise correlation with p-value. also use = "pearson"
 
+### visualize correlation using qgraph
+require(qgraph)
+qgraph(cor(mtcars))
+qgraph.pca(cor(mtcars), factors = 3) # arrows indicate loading on the PCA factors
+
+
 library("Rcmdr")
 rcorr.adjust(select(data, var1:var4), type = "pearson")
 
-### regression
+### Linear regression
 #y ~ x simple regression, y ~ -1 + x without intercept, y ~ . add all vars in the right-hand side
 #interaction: y ~ x1 + x2 + x1:x2 or y ~ x1*x2 or y ~ (x1+x2)^2
 #polynomial: y ~ x + I(x^2) + I(x^3) or y ~ poly(x,3)
 lm_model <- lm(y ~ x1 + x2 + x3, data = dataframe)
+lm_model <- lm(y ~ . - x3, data = dataframe)
+
+# result of regression
 summary(lm_model)
+fitted.values(lm_model) #vector of fitter values, y hat
+residuals(lm_model) #vector of residuals
+coef(lm_model) #coefficients
+df.residual(lm_model) #degree of freedom
+
 anova(lm_model)
 plot(lm_model)
-predict(lm_model, newdata) #makes prediction based on lm_model on newdata. predict() can be used with regression tree, nueral network, etc. as well
 
 tidy(lm_model) #prepares a small tidy dataset with result of lm() from library(broom)
+augment(lm_model) #returns a dataframe of variables, fitted values, residuals and others... library(broom)
+
+# prediction
+predict(lm_model, newdata) #makes prediction based on lm_model on newdata. newdata has to be data.frame and have the same y variable name. predict() can be used with regression tree, nueral network, etc. as well
+augment(lm_model, newdata = new_data) #newdata has to be data.frame and have the same y variable name... library(brook)
 
 compute_model_prediction(df, depvar ~ indpvar, model = "lm") #returns the x and y values of a line fitted to the data. other: model="loess"
+
+# outliers: leverage and influence
+# leverage: distance from the mean-- influence: high leverage and high residual (cook's distance)
+augment(lm_model) %>% arrange(desc(.hat)) %>% head() # after augment(), .hat includes the leverage scores... require(broom)
+augment(lm_model) %>% arrange(desc(.cooksd)) %>% head() #after augment(), .cooksd includes the influence/cook's distance... require(broom)
+
+
+### binomial logistic regression
+# coefficients are probability. Alternatives are odds ratio and log odds ratio.
+# Most people tend to interpret the fitted values on the probabilities scale and the function on the log-odds scale. The interpretation of the coefficients is most commonly done on the odds scale.
+# OR = odds(y|x + 1)/oss(y|x) = exp(beta_1)
+
+glm_model <- glm(y ~ x1 + x2, data = df, family = "binomial")
+
+augment(glm_model) #returns log odds scale for fitted values... we have to compute odds ratio or probabilities separately separately
+augment(glm_model, type.predict = "response") # returns fitted values in probability scale
+
+# out of sample prediction
+newdata <- data.frame(x1 = 44, x2 = 1)
+augment(glm_model, newdata = newdata, type.predict = "response") # returns prediction for new data using the parameters from glm_model
+
+# 
+ggplot() + geom_smooth(method = "glm", se = 0, color = "red", method.args = list(family = "binomial"))
+
+
+
 
 
 ### comparing groups

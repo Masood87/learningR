@@ -283,14 +283,17 @@ with(data, var1 - var2) #difference between var1 and var2 in data
 within(data, {newvar <- var1 - var2}) #creates newvar in data, which is difference between var1 and var2
 
 ### test of speed of different functions with microbenchmark
-library(microbenchmark)
+# library(microbenchmark)
 microbenchmark(expression1, expression2, times = 20) #checks both expressions 20 times
+
+### impute missing values
+# library(mice)
 
 ### packages
 search() #lists the attached packages in R
-library(package) #attach a package
-install.packages("package") #installs a package
-require(package) #attach a package, but unlike library ..
+library(pkgname) #attach a package
+install.packages("pkgname") #installs a package
+require(pkgname) #attach a package, but unlike library ..
 
 
 ### dont know what this is for now
