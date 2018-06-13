@@ -2,28 +2,43 @@
 ####### Data Management ########
 ################################
 
-rm(object)
-rm(list=ls())
+# remove objects
+rm(obj1, obj2, obj3)
+rm(list=ls()) # remove everything from the environment
+
+# working directory
 setwd("path")
-getwd()
+getwd() # print current wd
 dir() #list name of files.extension in the working directory
+list.files(pattern = ".csv")
+list.dirs()
+
+# attach and detach
 attach(df) #Since I'm not loading other data frames, I can attach this data frame to type less :)
 detach(df) #opposite of attach
 
-### quick look at the data
+# dimension of data
 dim(df) #dimensions of dataframe
+nrow(df)
+ncol(df)
+
+### quick look at the data 
 str(df)
 glimpse(df) #library(dplyr)
 length(object)
 summary(dataframe)
-names(data)
 head(data, n=11) #print top 11 obs
 tail(data, n=11)
-class(object)
-typeof(object)
+tbl_df(df) # nice way to display data.frame
 ls() #lists objects
 ls.str() #lists objects and their structure. ls() + str()
-tbl_df(df) # nice way to display data.frame
+
+names(df)
+colnames(df)
+rownames(df)
+
+class(object)
+typeof(object)
 
 ### is. and as.
 is.na(object) #returns a logical vector whether missing value

@@ -184,7 +184,7 @@ ggplot(df, aes(x = max_temp, y = month, height = ..density..)) +
 tileNAs <- function(x){
   is.na(x) %>% data.frame() %>% mutate(row_n = 1:nrow(.)) %>% gather(var, is_miss, -row_n) %>%
     ggplot(aes(var, row_n, fill = is_miss)) + geom_tile() + theme_bw() + scale_fill_discrete(name = "", labels = c("Present", "Missing")) +
-    theme(axis.text.x = element_text(angle = 90, vjust = .5)) + labs(x = "Variables in dataset", y = "Rows / observations") +
+    theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 0)) + labs(x = "Variables in dataset", y = "Rows / observations") +
     scale_x_discrete(position = "top")
 }
 tileNAs(df)
